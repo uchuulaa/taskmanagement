@@ -33,7 +33,7 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <ClipboardList className="h-6 w-6 text-primary mr-2" />
-            <span className="font-semibold text-xl">QuickTasks</span>
+            <span className="font-semibold text-xl">Taskly</span>
           </div>
           <div className="flex items-center">
             <Button

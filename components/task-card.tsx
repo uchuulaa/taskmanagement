@@ -4,8 +4,9 @@ import { Task } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PriorityBadge } from '@/components/ui/priority-badge';
-import { Pencil, Trash2, CheckCircle, Clock, ListTodo } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 interface TaskCardProps {
   task: Task;
@@ -15,63 +16,62 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) {
-  const isCompleted = task.status === 'completed';
-  const isInProgress = task.status === 'in-progress';
-  const isTodo = task.status === 'todo';
-
-  const getStatusIcon = () => {
-    if (isCompleted) return <CheckCircle className="h-5 w-5 text-green-500" />;
-    if (isInProgress) return <Clock className="h-5 w-5 text-blue-500" />;
-    return <ListTodo className="h-5 w-5 text-gray-500" />;
-  };
-
-  const getNextStatus = (): Task['status'] => {
-    if (isTodo) return 'in-progress';
-    if (isInProgress) return 'completed';
-    return 'todo';
-  };
+  const [status, setStatus] = useState(task.status);
 
   const getStatusColor = () => {
-    if (isCompleted) return 'bg-green-50';
-    if (isInProgress) return 'bg-blue-50';
+    if (status === 'completed') return 'bg-green-50';
+    if (status === 'in-progress') return 'bg-blue-50';
     return 'bg-gray-50';
+  };
+
+  const handleStatusChange = (newStatus: Task['status']) => {
+    setStatus(newStatus);
+    onStatusChange(task.id, newStatus);
   };
 
   return (
     <Card className={cn(
       'transition-all duration-300 hover:shadow-lg',
-      isCompleted && 'opacity-80 bg-gray-50'
+      status === 'completed' && 'opacity-80 bg-gray-50'
     )}>
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
         <div className="space-y-1">
           <h3 className={cn(
             "font-semibold leading-none tracking-tight",
-            isCompleted && 'line-through text-gray-500'
+            status === 'completed' && 'line-through text-gray-500'
           )}>
             {task.title}
           </h3>
           <PriorityBadge priority={task.priority} />
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onStatusChange(task.id, getNextStatus())}
-          className={cn(
-            "transition-all duration-300 hover:scale-110",
-            getStatusColor()
-          )}
-        >
-          {getStatusIcon()}
-        </Button>
+        
+        {/* Status Dropdown */}
+        <div className="relative">
+          <select
+            value={status}
+            onChange={(e) => handleStatusChange(e.target.value as Task['status'])}
+            className={cn(
+              "text-sm font-semibold rounded-md",
+              "p-1 focus:outline-none focus:ring-2 focus:ring-offset-2",
+              getStatusColor()
+            )}
+          >
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
       </CardHeader>
+      
       <CardContent>
         <p className={cn(
           "text-sm text-muted-foreground",
-          isCompleted && "text-gray-400"
+          status === 'completed' && "text-gray-400"
         )}>
           {task.description}
         </p>
       </CardContent>
+
       <CardFooter className="justify-between">
         <Button
           variant="ghost"

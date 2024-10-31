@@ -14,7 +14,7 @@ export default function Home() {
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-gradient">
-            QuickTasks
+            Taskly
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
             Streamline your workflow with our intuitive task management solution. Stay organized, boost productivity, and achieve more.

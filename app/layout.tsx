@@ -24,9 +24,10 @@ export default function RootLayout({
           <div className="flex-grow">
             {children}
           </div>
-          <Footer />
-          <Toaster />
         </AuthProvider>
+        
+        <Footer />
+        <Toaster />
       </body>
     </html>
   );
